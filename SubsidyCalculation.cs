@@ -45,6 +45,7 @@ namespace SubsidyCalculation
             }
             catch(Exception)
             {
+                Console.WriteLine("Something go wrong...");
                 throw;
             }
             
