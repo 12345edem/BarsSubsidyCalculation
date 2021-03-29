@@ -41,6 +41,10 @@ namespace SubsidyCalculation
             var charge = new Charge();
             try
             {
+                charge.HouseId = volumes.HouseId;
+                charge.ServiceId = tariff.ServiceId;
+                charge.Month = volumes.Month;
+            
                 charge.Value = volumes.Value * tariff.Value;
             }
             catch(Exception)

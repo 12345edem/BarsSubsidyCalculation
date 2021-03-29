@@ -24,12 +24,6 @@ namespace SubsidyCalculation
             volume1.Month = new DateTime(2021, 5, 29);
             volume1.Value = 100;
 
-            //Ввод данных по начислению
-            var charge = new Charge();
-            charge.ServiceId = 1;
-            charge.HouseId = 1;
-            charge.Month = new DateTime(2021, 4, 29);
-
             //Расчет субсидии
             var subCalcs = new SubsidyCalculation();
             subCalcs.OnNotify += DisplayMessage;
