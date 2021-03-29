@@ -47,9 +47,9 @@ namespace SubsidyCalculation
             
                 charge.Value = volumes.Value * tariff.Value;
             }
-            catch(Exception)
+            catch(Exception e)
             {
-                Console.WriteLine("Something go wrong...");
+                OnException?.Invoke(this, Tuple.Create("Something go wrong...", e));
                 throw;
             }
             
