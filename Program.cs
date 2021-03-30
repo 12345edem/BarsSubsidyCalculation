@@ -22,7 +22,7 @@ namespace SubsidyCalculation
             volume1.ServiceId = 1;
             volume1.HouseId = 1;
             volume1.Month = new DateTime(2021, 5, 29);
-            volume1.Value = 100;
+            volume1.Value = -100;
 
             //Расчет субсидии
             var subCalcs = new SubsidyCalculation();

@@ -3,6 +3,19 @@ using System;
 namespace SubsidyCalculation
 {
     ///<summary>
+    ///Класс исключения при ошибке валидации
+    ///</summary>
+    class ValidationException : Exception
+    {
+        ///<summary>
+        ///Исключение при ошибке валидации
+        ///</summary>
+        public ValidationException(string message)
+            : base(message)
+        { }
+    }
+
+    ///<summary>
     ///Класс, реализующий расчет субсидии
     ///</summary>
     class SubsidyCalculation : ISubsidyCalculation
@@ -17,39 +30,42 @@ namespace SubsidyCalculation
             OnNotify?.Invoke(this, "Расчет начат в " + DateTime.Now);
 
             if(volumes.HouseId != tariff.HouseId)
-                InvalidInput(new Exception("House ID's does't match, code: 1"),
-                                    "Идентификаторы домов не совпадают");
-
+            {
+                InvalidInput(new ValidationException("House ID's does't match, code: 1"),
+                                                    "Идентификаторы домов не совпадают");
+            }
             if(volumes.ServiceId != tariff.ServiceId)
-                InvalidInput(new Exception("Service ID's does't match, code: 2"),
-                                    "Идентификаторы сервисов не совпадают");
-
+            {
+                InvalidInput(new ValidationException("Service ID's does't match, code: 2"),
+                                                    "Идентификаторы сервисов не совпадают");
+            }
             if(!(tariff.PeriodBegin.Month <= volumes.Month.Month && volumes.Month.Month <= tariff.PeriodEnd.Month))
             {
-                InvalidInput(new Exception("discrepancy between the terms of using the volume and the tariff, code: 3"),
-                                    "месяц объёма должен входить в период действия тарифа");
+                InvalidInput(new ValidationException("discrepancy between the terms of using the volume and the tariff, code: 3"),
+                                                    "месяц объёма должен входить в период действия тарифа");
             }
 
             if(tariff.Value <= 0)
-                InvalidInput(new Exception("Zero or negative tariff values ​​are not allowed, code: 4"),
-                                    "Не допускается нулевых или отрицательных значений тарифа");
-
+            {
+                InvalidInput(new ValidationException("Zero or negative tariff values ​​are not allowed, code: 4"),
+                                                    "Не допускается нулевых или отрицательных значений тарифа");  
+            }
             if(volumes.Value < 0)
-                InvalidInput(new Exception("Negative volume values ​​are not allowed, code: 5"),
-                                    "Не допускается отрицательных значений объема");
-
+            {
+                InvalidInput(new ValidationException("Negative volume values ​​are not allowed, code: 5"),
+                                                    "Не допускается отрицательных значений объема");
+            }
             var charge = new Charge();
             try
             {
                 charge.HouseId = volumes.HouseId;
                 charge.ServiceId = tariff.ServiceId;
                 charge.Month = volumes.Month;
-            
                 charge.Value = volumes.Value * tariff.Value;
-            }
+            }   
             catch(Exception e)
             {
-                OnException?.Invoke(this, Tuple.Create("Something go wrong...", e));
+                OnException?.Invoke(this, Tuple.Create("Calculating unexpected error: ", e));
                 throw;
             }
             
